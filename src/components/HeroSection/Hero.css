@@ -63,3 +63,7 @@
     font-size: 18px;
   }
 }
+
+.Card-link{
+  text-decoration: none;
+}

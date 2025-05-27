@@ -7,7 +7,8 @@ import useProductView from "../../Hooks/useProductView"
 const ProductView = () => {
     const {id} = useParams()
     const productInfo = useProductView(id)
-    const {title, image, price, rating, description, category, isFeatured} =productInfo
+    if(!productInfo) return <h1>Loading....</h1>
+    const {title, image, price,  description, category} =productInfo
    
   return (
     <>
@@ -17,7 +18,7 @@ const ProductView = () => {
         <div>
           <div className="image-gallery">
             <div className="main-image-container">
-              <img src="/placeholder.svg?height=400&width=600" alt="iPhone 13 Green" className="main-image" />
+              <img src={image || "/placeholder.svg?height=400&width=600"} alt="iPhone 13 Green" className="main-image" />
               <button className="nav-arrow nav-arrow-left">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -33,7 +34,7 @@ const ProductView = () => {
             </div>
             <div className="thumbnail-container">
               <div className="thumbnail active">
-                <img src="/placeholder.svg?height=64&width=64" alt="Thumbnail 1" />
+                <img src="{}/placeholder.svg?height=64&width=64" alt="Thumbnail 1" />
               </div>
               <div className="thumbnail">
                 <img src="/placeholder.svg?height=64&width=64" alt="Thumbnail 2" />
@@ -49,17 +50,14 @@ const ProductView = () => {
             <h3 className="details-title">Details</h3>
             <div className="details-grid">
               <div className="detail-item">
-                <span>Brand</span>
-                <p>iphone</p>
+                <span>{category}</span>
+                <p>{title}</p>
               </div>
             </div>
 
             <h3 className="details-title">Description</h3>
             <div className="description-text">
-              <p>want to sell my 11 months old iPhone 13 256gb urgently.</p>
-              <p>Need money</p>
-              <p>Very less used phone, with cover case and screen guard. Original box and bill is also available.</p>
-              <p>Genuine buyers please</p>
+              <p>{description}</p>
             </div>
           </div>
         </div>
@@ -69,7 +67,7 @@ const ProductView = () => {
           {/* Price and Actions */}
           <div className="info-card">
             <div className="price-header">
-              <h1 className="price">₹ 20,000</h1>
+              <h1 className="price">₹ {price}</h1>
               <div className="action-buttons">
                 <button className="action-button">
                   <Share2 />
@@ -80,7 +78,7 @@ const ProductView = () => {
               </div>
             </div>
 
-            <h2 className="product-title">iPhone 13 Black 128Gb 11 month warranty with all accessories</h2>
+            <h2 className="product-title">{title}</h2>
 
             <div className="location-info">
               <MapPin />
