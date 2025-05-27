@@ -1,6 +1,28 @@
 import "./Card.css"
 
-const Card = ({title, image, price, rating, description, category, isFeatured}) => {
+const Card = ({
+  image,
+  price,
+  year,
+  details,
+  title,
+  location,
+  timePosted,
+  isFeatured = false,
+  isPromotional = false,
+  promotionalContent,
+}) => {
+  if (isPromotional) {
+    return (
+      <div className="card promotional-card">
+        <div className="promotional-content">
+          <h3>{promotionalContent.title}</h3>
+          <p>{promotionalContent.description}</p>
+          <button className="promotional-btn">{promotionalContent.buttonText}</button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="card">
@@ -15,12 +37,12 @@ const Card = ({title, image, price, rating, description, category, isFeatured}) 
       <div className="card-content">
         <div className="card-price">₹ {price}</div>
         <div className="card-details">
-          {rating.rate} · {description}
+          {year} · {details}
         </div>
         <div className="card-title">{title}</div>
         <div className="card-footer">
-          <span className="card-location">location</span>
-          <span className="card-time">{category}</span>
+          <span className="card-location">{location}</span>
+          <span className="card-time">{timePosted}</span>
         </div>
       </div>
     </div>
