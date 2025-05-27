@@ -4,11 +4,11 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import LoginModal from "../LoginModal/LoginModal";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, LogOut } from "../../utils/firebase";
+import { Link } from "react-router-dom";
 
 
-const Navbar = () => {
+const Navbar = ({setIsLogin}) => {
 
-  const [isLogin, setIsLogin] = useState(false)
   const [user, setUser] = useState(null)
 
   const openLogModal = ()=>{
@@ -110,7 +110,7 @@ const Navbar = () => {
 
             {/* Sell Button */}
             <button className="sell-btn">
-              <i className="fas fa-plus"></i>
+             <Link to={"/sellProduct"}><i className="fas fa-plus"></i></Link> 
               SELL
             </button>
           </div>
@@ -133,7 +133,7 @@ const Navbar = () => {
           <div className="category-item">For Rent: Houses & Apartments</div>
         </div>
       </div>
-      {isLogin && <LoginModal setIsLogin={setIsLogin}/>}
+      
     </>
   )
 }

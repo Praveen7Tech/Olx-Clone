@@ -3,8 +3,20 @@ import "./ProductView.css"
 import Navbar from "../../components/Navbar/Navbar"
 import { useParams } from "react-router-dom"
 import useProductView from "../../Hooks/useProductView"
+import { useState } from "react"
+import ChatModal from "../../components/ChatModal/ChatModal"
 
-const ProductView = () => {
+const ProductView = ({user, setIsLogin}) => {
+  
+    const [showChat, setShowChat] =useState(false)
+    const chatWithSeller =()=>{
+      if(!user){
+        setIsLogin(true)
+        return
+      }
+      setShowChat(true)
+    }
+
     const {id} = useParams()
     const productInfo = useProductView(id)
     if(!productInfo) return <h1>Loading....</h1>
@@ -111,7 +123,7 @@ const ProductView = () => {
               <p className="items-label">Items listed</p>
             </div>
 
-            <button className="chat-button">Chat with seller</button>
+            <button onClick={chatWithSeller} className="chat-button">Chat with seller</button>
 
             <div className="phone-info">
               <Phone />
@@ -158,6 +170,7 @@ const ProductView = () => {
           </div>
         </div>
       </div>
+      {showChat && <ChatModal setShowChat={setShowChat}/>}
     </div>
     </>
   )
