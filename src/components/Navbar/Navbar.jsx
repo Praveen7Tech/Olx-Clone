@@ -7,13 +7,22 @@ import { auth, LogOut } from "../../utils/firebase";
 import { Link } from "react-router-dom";
 
 
-const Navbar = ({setIsLogin}) => {
+const Navbar = ({ setIsLogin, products,  setFilterProducts }) => {
 
   const [user, setUser] = useState(null)
-
+  const [searchValue, setSearchValue] = useState("")
+ console.log("set fill",setFilterProducts)
   const openLogModal = ()=>{
     setIsLogin(true)
   }
+  console.log("search",searchValue)
+
+  const SearchProducts = () => {
+    const filtered = products.filter(item =>
+      item.title.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    setFilterProducts(filtered);
+  };
 
   useEffect(()=>{
     const unSubscribe = onAuthStateChanged(auth,(currentUser) =>{
@@ -33,30 +42,30 @@ const Navbar = ({setIsLogin}) => {
         <div className="navbar-container">
           {/* Logo and Location */}
           <div className="nav-left">
+            <Link to={"/"} onClick={() => setFilterProducts(products)}>
             <img
               className="logo"
               src="https://statics.olx.in/external/base/img/olxLogo/olx_logo_2025.svg"
               alt="OLX Logo"
             />
-
+            </Link>
             {/* Location Selector */}
             <div className="location-selector">
               <i className="fas fa-search location-icon"></i>
               <select className="location-dropdown">
                 <option value="india">India</option>
-                <option value="mumbai">Mumbai</option>
-                <option value="delhi">Delhi</option>
-                <option value="bangalore">Bangalore</option>
+                <option value="mumbai">Kerala</option>
+                <option value="delhi">Ernakulam</option>
+                <option value="bangalore">Nilambur</option>
               </select>
-              <i className="fas fa-chevron-down dropdown-arrow"></i>
             </div>
           </div>
 
           {/* Search Bar */}
           <div className="nav-midd">
             <div className="search-container">
-              <input className="search-box" type="text" placeholder='Search "Bikes"' />
-              <button className="search-btn">
+              <input onChange={(e) => {setSearchValue(e.target.value)}} className="search-box" type="text" placeholder='Search "Bikes"' />
+              <button onClick={SearchProducts} className="search-btn">
                 <i className="fas fa-search"></i>
               </button>
             </div>
@@ -117,7 +126,6 @@ const Navbar = ({setIsLogin}) => {
         </div>
       </div>
 
-      {/* Category Navigation */}
       <div className="category-navbar">
         <div className="category-container">
           <div className="category-item dropdown">

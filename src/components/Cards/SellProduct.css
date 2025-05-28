@@ -19,7 +19,7 @@
 }
 
 .card-header {
-  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  background: linear-gradient(135deg, #3f7ecf, #548dd8);
   color: white;
   padding: 30px;
   text-align: center;
@@ -205,7 +205,7 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  background: linear-gradient(135deg, #4b60d6, #2b80e1);
   color: white;
 }
 
@@ -267,3 +267,10 @@
   }
 }
 
+
+.image-upload-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    width: 200px;
+}

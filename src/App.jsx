@@ -8,10 +8,13 @@ import ProtectedRoute from './components/ProtectedRoute';
 import LoginModal from './components/LoginModal/LoginModal';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './utils/firebase';
+import useProducts from './Hooks/useProducts';
 
 const App = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [user, setUser] = useState(null)
+
+  const productState = useProducts()
 
   useEffect(()=>{
     const unSubscribe = onAuthStateChanged(auth,(currentUser) =>{
@@ -23,7 +26,7 @@ const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home setIsLogin={setIsLogin} />} />
+        <Route path="/" element={<Home {...productState} setIsLogin={setIsLogin} />} />
         <Route path="/product/:id" element={<ProductView user={user} setIsLogin={setIsLogin}/>} />
         <Route
           path="/sellProduct"

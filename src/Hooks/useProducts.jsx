@@ -5,6 +5,7 @@ import { PRODUCT_API } from "../utils/constants";
 
 const useProducts = () => {
   const [products, setProducts] = useState([]);
+  const [filterProducts, setFilterProducts] = useState([])
 
   useEffect(() => {
     const fetchAllProducts = async () => {
@@ -22,6 +23,7 @@ const useProducts = () => {
 
         const combined = [...firebaseData, ...apiData];
         setProducts(combined);
+        setFilterProducts(combined)
 
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -31,7 +33,7 @@ const useProducts = () => {
     fetchAllProducts();
   }, []);
 
-  return { products };
+  return { products, filterProducts, setFilterProducts };
 };
 
 export default useProducts;

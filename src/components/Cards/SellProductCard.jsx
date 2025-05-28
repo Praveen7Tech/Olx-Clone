@@ -70,7 +70,7 @@ const SellProductCard = () => {
 
   return (
     <div className="sell-product-container">
-      <div className="sell-product-card">
+      <div className="sell-product-card">      
         <div className="card-header">
           <h2>POST YOUR AD</h2>
           <p>Fill in the details to sell your product</p>
@@ -188,7 +188,7 @@ const SellProductCard = () => {
                 <img
                   src={URL.createObjectURL(image)}
                   alt=""
-                  style={{ width: "346px", marginRight: "10px" }}
+                  style={{ width: "265px", marginRight: "10px" }}
                 />
                  <button
                     type="button"
