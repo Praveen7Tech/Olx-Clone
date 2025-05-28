@@ -1,0 +1,10 @@
+ <div className="image-upload-box">
+                  <div className="upload-icon">📷</div>
+                  <span>Add Photo</span>
+                  <input type="file" accept="image/*" />
+                </div>
+                <div className="image-upload-box">
+                  <div className="upload-icon">📷</div>
+                  <span>Add Photo</span>
+                  <input type="file" accept="image/*" />
+                </div>

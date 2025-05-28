@@ -2,6 +2,8 @@
 import { initializeApp } from "firebase/app";
 //import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { getStorage } from "firebase/storage";
+import { collection, Firestore, getDocs, getFirestore } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -23,6 +25,24 @@ const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app)
 export const googleProvider =new GoogleAuthProvider()
+const storage = getStorage()
+const firebaseStore = getFirestore()
+
+const fetchFromFirestore = async()=>{
+  try {
+    const productCollection = collection(firebaseStore, "products")
+    const productSnapshot = await getDocs(productCollection)
+    const productList = productSnapshot.docs.map(doc =>({
+      id: doc.id,
+      ...doc.data()
+    }))
+    console.log("pro list",productList)
+    return productList
+  } catch (error) {
+    console.log(error)
+    return []
+  }
+}
 
 const Signup = async(setIsLogin)=>{
   try {
@@ -39,4 +59,4 @@ const LogOut = async ()=>{
   console.log("signout")
 }
 
-export {Signup, LogOut}
+export {Signup, LogOut, storage, firebaseStore,fetchFromFirestore}

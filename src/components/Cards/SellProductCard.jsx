@@ -1,7 +1,73 @@
-
-import "./SellProduct.css"
+import { useState } from "react";
+import "./SellProduct.css";
+import { addDoc, collection } from "firebase/firestore";
+import { auth, firebaseStore } from "../../utils/firebase";
+import { useNavigate } from "react-router-dom";
 
 const SellProductCard = () => {
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(0);
+  const [brand, setBrand] = useState("");
+  const [image, setImage] = useState(null);
+
+  const navigate = useNavigate();
+
+  const handleImageUpload = (e) => {
+    if (e.target.files) {
+      setImage(e.target.files[0]);
+    }
+  };
+
+  const submitForm = async (e) => {
+    e.preventDefault();
+
+    // Helper to read image as DataURL
+    const readImageAsDataURL = (file) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const imgUrl = reader.result;
+          localStorage.setItem(`image_${file.name}`, imgUrl);
+          resolve(imgUrl);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    };
+
+    let imageURL = "";
+    if (image) {
+      try {
+        imageURL = await readImageAsDataURL(image);
+      } catch (error) {
+        console.error("Failed to read image as data URL:", error);
+        alert("Failed to read image URL.");
+        return;
+      }
+    }
+
+    try {
+      await addDoc(collection(firebaseStore, "products"), {
+        title: title.trim(),
+        category: category.trim(),
+        description: description.trim(),
+        price: Number(price),
+        brand: brand.trim(),
+        imageURL,
+        userId: auth.currentUser?.uid,
+        userName: auth.currentUser?.displayName,
+        createdAt: new Date().toDateString(),
+      });
+
+      console.log("Product successfully added");
+      navigate("/");
+    } catch (error) {
+      console.log("Error adding product:", error);
+    }
+  };
+
   return (
     <div className="sell-product-container">
       <div className="sell-product-card">
@@ -11,33 +77,20 @@ const SellProductCard = () => {
         </div>
 
         <div className="card-content">
-          <form className="sell-form">
+          <form onSubmit={submitForm} className="sell-form">
             {/* Category Section */}
             <div className="form-section">
               <h3>Category & Details</h3>
               <div className="form-row">
                 <div className="form-group">
                   <label htmlFor="category">Category *</label>
-                  <select id="category" required>
-                    <option value="">Select a category</option>
-                    <option value="electronics">Electronics</option>
-                    <option value="vehicles">Vehicles</option>
-                    <option value="furniture">Furniture</option>
-                    <option value="clothing">Clothing & Fashion</option>
-                    <option value="books">Books & Sports</option>
-                    <option value="home">Home & Garden</option>
-                    <option value="services">Services</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="subcategory">Subcategory</label>
-                  <select id="subcategory">
-                    <option value="">Select subcategory</option>
-                    <option value="mobile">Mobile Phones</option>
-                    <option value="laptop">Laptops</option>
-                    <option value="camera">Cameras</option>
-                    <option value="tv">TV & Audio</option>
-                  </select>
+                  <input
+                    onChange={(e) => setCategory(e.target.value)}
+                    type="text"
+                    id="category"
+                    placeholder="Enter product category"
+                    required
+                  />
                 </div>
               </div>
             </div>
@@ -47,16 +100,34 @@ const SellProductCard = () => {
               <h3>Product Information</h3>
               <div className="form-group">
                 <label htmlFor="title">Product Title *</label>
-                <input type="text" id="title" placeholder="Enter product title" required />
+                <input
+                  onChange={(e) => setTitle(e.target.value)}
+                  type="text"
+                  id="title"
+                  placeholder="Enter product title"
+                  required
+                />
               </div>
               <div className="form-group">
                 <label htmlFor="description">Description *</label>
-                <textarea id="description" placeholder="Describe your product in detail" rows={4} required></textarea>
+                <textarea
+                  onChange={(e) => setDescription(e.target.value)}
+                  id="description"
+                  placeholder="Describe your product in detail"
+                  rows={4}
+                  required
+                ></textarea>
               </div>
               <div className="form-row">
                 <div className="form-group">
                   <label htmlFor="brand">Brand</label>
-                  <input type="text" id="brand" placeholder="Enter brand name" />
+                  <input
+                    onChange={(e) => setBrand(e.target.value)}
+                    type="text"
+                    id="brand"
+                    placeholder="Enter brand name"
+                    required
+                  />
                 </div>
                 <div className="form-group">
                   <label htmlFor="model">Model</label>
@@ -73,7 +144,13 @@ const SellProductCard = () => {
                   <label htmlFor="price">Price *</label>
                   <div className="price-input">
                     <span className="currency">₹</span>
-                    <input type="number" id="price" placeholder="0" required />
+                    <input
+                      onChange={(e) => setPrice(e.target.value)}
+                      type="number"
+                      id="price"
+                      placeholder="0"
+                      required
+                    />
                   </div>
                 </div>
                 <div className="form-group">
@@ -84,11 +161,20 @@ const SellProductCard = () => {
                       <span>New</span>
                     </label>
                     <label className="radio-label">
-                      <input type="radio" name="condition" value="used" defaultChecked />
+                      <input
+                        type="radio"
+                        name="condition"
+                        value="used"
+                        defaultChecked
+                      />
                       <span>Used</span>
                     </label>
                     <label className="radio-label">
-                      <input type="radio" name="condition" value="refurbished" />
+                      <input
+                        type="radio"
+                        name="condition"
+                        value="refurbished"
+                      />
                       <span>Refurbished</span>
                     </label>
                   </div>
@@ -97,82 +183,49 @@ const SellProductCard = () => {
             </div>
 
             {/* Images */}
-            <div className="form-section">
-              <h3>Photos</h3>
-              <div className="image-upload-grid">
-                <div className="image-upload-box">
-                  <div className="upload-icon">📷</div>
-                  <span>Add Photo</span>
-                  <input type="file" accept="image/*" />
-                </div>
-                <div className="image-upload-box">
-                  <div className="upload-icon">📷</div>
-                  <span>Add Photo</span>
-                  <input type="file" accept="image/*" />
-                </div>
-                <div className="image-upload-box">
-                  <div className="upload-icon">📷</div>
-                  <span>Add Photo</span>
-                  <input type="file" accept="image/*" />
-                </div>
-                <div className="image-upload-box">
-                  <div className="upload-icon">📷</div>
-                  <span>Add Photo</span>
-                  <input type="file" accept="image/*" />
+            {image ? (
+              <div className="image-preview">
+                <img
+                  src={URL.createObjectURL(image)}
+                  alt=""
+                  style={{ width: "346px", marginRight: "10px" }}
+                />
+                 <button
+                    type="button"
+                    onClick={() => setImage(null)}
+                    className="remove-image-btn"
+                    style={{
+                      marginLeft: "10px",
+                      background: "red",
+                      color: "white",
+                      border: "none",
+                      padding: "5px 10px",
+                      cursor: "pointer"
+                    }}
+                  >
+                    Remove
+                  </button>
+              </div>
+            ) : (
+              <div className="form-section">
+                <h3>Photos</h3>
+                <div className="image-upload-grid">
+                  <div className="image-upload-box">
+                    <div className="upload-icon">📷</div>
+                    <span>Add Photo</span>
+                    <input
+                      onChange={handleImageUpload}
+                      type="file"
+                      accept="image/*"
+                      required
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-
-            {/* Location */}
-            <div className="form-section">
-              <h3>Location</h3>
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="state">State *</label>
-                  <select id="state" required>
-                    <option value="">Select state</option>
-                    <option value="delhi">Delhi</option>
-                    <option value="mumbai">Mumbai</option>
-                    <option value="bangalore">Bangalore</option>
-                    <option value="chennai">Chennai</option>
-                    <option value="kolkata">Kolkata</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="city">City *</label>
-                  <input type="text" id="city" placeholder="Enter your city" required />
-                </div>
-              </div>
-              <div className="form-group">
-                <label htmlFor="locality">Locality</label>
-                <input type="text" id="locality" placeholder="Enter locality/area" />
-              </div>
-            </div>
-
-            {/* Contact Information */}
-            <div className="form-section">
-              <h3>Contact Information</h3>
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="name">Your Name *</label>
-                  <input type="text" id="name" placeholder="Enter your name" required />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="phone">Phone Number *</label>
-                  <input type="tel" id="phone" placeholder="+91 9876543210" required />
-                </div>
-              </div>
-              <div className="form-group">
-                <label htmlFor="email">Email (Optional)</label>
-                <input type="email" id="email" placeholder="your.email@example.com" />
-              </div>
-            </div>
+            )}
 
             {/* Submit Buttons */}
             <div className="form-actions">
-              <button type="button" className="btn-secondary">
-                Save as Draft
-              </button>
               <button type="submit" className="btn-primary">
                 Post Your Ad
               </button>
@@ -181,8 +234,7 @@ const SellProductCard = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SellProductCard
-
+export default SellProductCard;
