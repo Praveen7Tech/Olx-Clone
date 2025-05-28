@@ -7,7 +7,7 @@ const Hero = () => {
  
   const {products} = useProducts()
 
-  if( !products) return
+  if( !products) return 
 
   return (
     <div className="hero-section">
@@ -15,7 +15,7 @@ const Hero = () => {
         <h2 className="section-title">Fresh recommendations</h2>
         <div className="cards">
           {products.map((card) => (
-            <Link className="Card-link" to={"/product/"+card.id}><Card key={card.id} {...card} /></Link>
+            <Link className="Card-link" to={"/product/"+card.id}><Card key={card.id} {...card} image={card.image || card.imageURL} /></Link>
           ))}
         </div>
       </div>

@@ -1,11 +1,16 @@
 import "./Card.css"
 
-const Card = ({title, image, price, rating, description, category, isFeatured}) => {
+const Card = ({title, image,imageURL, price,  description, category, isFeatured}) => {
+  const imageSrc = image || imageURL || "/placeholder.svg";
+
+  const truncateText = (text, maxLength = 60) => {
+    return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+  };
 
   return (
     <div className="card">
       <div className="card-image-container">
-        <img src={image || "/placeholder.svg"} alt={title} className="card-image" />
+        <img src={imageSrc} alt={title} className="card-image" />
         <div className="card-heart">
           <i className="far fa-heart"></i>
         </div>
@@ -15,11 +20,11 @@ const Card = ({title, image, price, rating, description, category, isFeatured}) 
       <div className="card-content">
         <div className="card-price">₹ {price}</div>
         <div className="card-details">
-          {rating.rate} · {description}
+           {truncateText(description, 60)}
         </div>
         <div className="card-title">{title}</div>
         <div className="card-footer">
-          <span className="card-location">location</span>
+          <span className="card-location">Verified</span>
           <span className="card-time">{category}</span>
         </div>
       </div>

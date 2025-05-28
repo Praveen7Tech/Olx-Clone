@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom"
 import useProductView from "../../Hooks/useProductView"
 import { useState } from "react"
 import ChatModal from "../../components/ChatModal/ChatModal"
+import ProductShimmer from "../../components/Shimmer/ProductShimmer"
 
 const ProductView = ({user, setIsLogin}) => {
   
@@ -19,8 +20,9 @@ const ProductView = ({user, setIsLogin}) => {
 
     const {id} = useParams()
     const productInfo = useProductView(id)
-    if(!productInfo) return <h1>Loading....</h1>
-    const {title, image, price,  description, category} =productInfo
+    if(!productInfo) return <ProductShimmer/>
+    const {title, image,imageURL, price,  description, category} =productInfo
+    const imageSrc = image || imageURL || "/placeholder.svg";
    
   return (
     <>
@@ -30,7 +32,7 @@ const ProductView = ({user, setIsLogin}) => {
         <div>
           <div className="image-gallery">
             <div className="main-image-container">
-              <img src={image || "/placeholder.svg?height=400&width=600"} alt="iPhone 13 Green" className="main-image" />
+              <img src={imageSrc} alt="iPhone 13 Green" className="main-image" />
               <button className="nav-arrow nav-arrow-left">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -41,20 +43,10 @@ const ProductView = ({user, setIsLogin}) => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </button>
-              <div className="image-counter">1 / 3</div>
+              {/* <div className="image-counter">1 / 3</div> */}
               <div className="olx-watermark">OLX</div>
             </div>
-            <div className="thumbnail-container">
-              <div className="thumbnail active">
-                <img src="{}/placeholder.svg?height=64&width=64" alt="Thumbnail 1" />
-              </div>
-              <div className="thumbnail">
-                <img src="/placeholder.svg?height=64&width=64" alt="Thumbnail 2" />
-              </div>
-              <div className="thumbnail">
-                <img src="/placeholder.svg?height=64&width=64" alt="Thumbnail 3" />
-              </div>
-            </div>
+            
           </div>
 
           {/* Product Details Section */}
@@ -94,7 +86,7 @@ const ProductView = ({user, setIsLogin}) => {
 
             <div className="location-info">
               <MapPin />
-              <span>Samudrapur MIDC, Maharashtra, India</span>
+              <span>Kerala, India</span>
               <span className="date">Today</span>
             </div>
           </div>
@@ -108,7 +100,7 @@ const ProductView = ({user, setIsLogin}) => {
                 </div>
                 <div className="seller-details">
                   <p className="seller-name">
-                    Posted By <span className="name-link">Anaya</span>
+                    Posted By <span className="name-link">Unknown</span>
                   </p>
                   <p className="member-since">Member since Mar 2025</p>
                 </div>
@@ -119,7 +111,7 @@ const ProductView = ({user, setIsLogin}) => {
             </div>
 
             <div className="items-count">
-              <p className="items-number">171</p>
+              {/* <p className="items-number">171</p> */}
               <p className="items-label">Items listed</p>
             </div>
 
@@ -128,16 +120,16 @@ const ProductView = ({user, setIsLogin}) => {
             <div className="phone-info">
               <Phone />
               <span className="phone-number">•• ••• ••••</span>
-              <a href="#" className="show-number">
+              {/* <a href="#" className="show-number">
                 Show number
-              </a>
+              </a> */}
             </div>
           </div>
 
           {/* Posted In */}
           <div className="info-card">
             <h3 className="posted-in-title">Posted in</h3>
-            <p className="posted-location">Samudrapur MIDC, Maharashtra, India</p>
+            <p className="posted-location">Kerala, India</p>
           </div>
 
           {/* Map */}

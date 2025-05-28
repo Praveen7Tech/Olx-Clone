@@ -1,24 +1,37 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { firebaseStore } from "../utils/firebase";
 import { PRODUCT_API } from "../utils/constants";
 
 const useProducts = () => {
-  const [products, setProducts] = useState(null);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetchProduct();
+    const fetchAllProducts = async () => {
+      try {
+        // data from your API
+        const apiRes = await fetch(PRODUCT_API);
+        const apiData = await apiRes.json();
+
+        // data from Firebase
+        const snapshot = await getDocs(collection(firebaseStore, "products"));
+        const firebaseData = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        const combined = [...firebaseData, ...apiData];
+        setProducts(combined);
+
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchAllProducts();
   }, []);
 
-  const fetchProduct = async () => {
-    try {
-      const data = await fetch(PRODUCT_API);
-      const json = await data.json();
-      setProducts(json);
-      console.log("products ", json);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  return {products}
+  return { products };
 };
 
 export default useProducts;

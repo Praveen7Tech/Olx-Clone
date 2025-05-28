@@ -4,6 +4,7 @@ const ChatModal = ({ setShowChat }) => {
   const handleClose = () => {
     setShowChat(false)
   }
+  
 
   return (
     <div className="chat-modal-overlay">
@@ -12,9 +13,9 @@ const ChatModal = ({ setShowChat }) => {
           <h3>Chat with Seller</h3>
           <button onClick={handleClose} className="close-btn">&times;</button>
         </div>
-        <form action="">
+        <form >
         <div className="chat-body">
-          <p>Start your conversation here...</p>
+          <p>Send a messaege here...</p>
           <textarea placeholder="Type your message..." />
         </div>
         <div className="chat-footer">
