@@ -1,4 +1,4 @@
-// Home.jsx
+
 import "./Home.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Hero from "../../components/HeroSection/Hero";

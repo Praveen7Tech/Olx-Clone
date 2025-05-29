@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Navbar.css"
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import LoginModal from "../LoginModal/LoginModal";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, LogOut } from "../../utils/firebase";
 import { Link } from "react-router-dom";
@@ -11,12 +10,31 @@ const Navbar = ({ setIsLogin, products,  setFilterProducts }) => {
 
   const [user, setUser] = useState(null)
   const [searchValue, setSearchValue] = useState("")
+  const [categories, setCategories] = useState([])
+
  console.log("set fill",setFilterProducts)
   const openLogModal = ()=>{
     setIsLogin(true)
   }
-  console.log("search",searchValue)
 
+  // filter based on category
+  useEffect(() => {
+    if (products && Array.isArray(products)) {
+      const categories = [...new Set(products.map(pro => pro.category?.trim()))];
+      setCategories(categories);
+    }
+  }, [products]);
+
+  const filterCategory= (category)=>{
+      const filteredProductsCat = products.filter(product =>
+        product.category?.toLowerCase() === category.toLowerCase()
+      )
+      console.log("filter cat",category,"val",filteredProductsCat)
+      setFilterProducts(filteredProductsCat)
+    
+  }
+
+  // search product
   const SearchProducts = () => {
     const filtered = products.filter(item =>
       item.title.toLowerCase().includes(searchValue.toLowerCase())
@@ -133,16 +151,13 @@ const Navbar = ({ setIsLogin, products,  setFilterProducts }) => {
       <div className="category-navbar">
         <div className="category-container">
           <div className="category-item dropdown">
-            <span>ALL CATEGORIES</span>
-            <i className="fas fa-chevron-down"></i>
+            <span onClick={()=> setFilterProducts(products)}>ALL CATEGORIES</span>
           </div>
-          <div className="category-item">Cars</div>
-          <div className="category-item">Motorcycles</div>
-          <div className="category-item">Mobile Phones</div>
-          <div className="category-item">For Sale: Houses & Apartments</div>
-          <div className="category-item">Scooters</div>
-          <div className="category-item">Commercial & Other Vehicles</div>
-          <div className="category-item">For Rent: Houses & Apartments</div>
+          {categories.map(category=>(
+            <div key={category} onClick={()=> filterCategory(category)} className="category-item" >
+            {category}
+            </div> 
+          ))}
         </div>
       </div>
       
