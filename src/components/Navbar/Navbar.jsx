@@ -1,57 +1,31 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./Navbar.css"
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { onAuthStateChanged } from "firebase/auth";
-import { auth, LogOut } from "../../utils/firebase";
+import { LogOut } from "../../utils/firebase";
 import { Link } from "react-router-dom";
+
+import useAuthState from "../../Hooks/useAuthState";
+import useCategoryFilter from "../../Hooks/useCategoryFilter";
 
 
 const Navbar = ({ setIsLogin, products,  setFilterProducts }) => {
 
-  const [user, setUser] = useState(null)
+  const user = useAuthState()
   const [searchValue, setSearchValue] = useState("")
-  const [categories, setCategories] = useState([])
 
- console.log("set fill",setFilterProducts)
+  const {categories, filterCategory} = useCategoryFilter(products,setFilterProducts)
+  
   const openLogModal = ()=>{
     setIsLogin(true)
   }
-
-  // filter based on category
-  useEffect(() => {
-    if (products && Array.isArray(products)) {
-      const categories = [...new Set(products.map(pro => pro.category?.trim()))];
-      setCategories(categories);
-    }
-  }, [products]);
-
-  const filterCategory= (category)=>{
-      const filteredProductsCat = products.filter(product =>
-        product.category?.toLowerCase() === category.toLowerCase()
-      )
-      console.log("filter cat",category,"val",filteredProductsCat)
-      setFilterProducts(filteredProductsCat)
-    
-  }
-
-  // search product
-  const SearchProducts = () => {
-    const filtered = products.filter(item =>
-      item.title.toLowerCase().includes(searchValue.toLowerCase())
-    );
-    setFilterProducts(filtered);
-  };
-
-  useEffect(()=>{
-    const unSubscribe = onAuthStateChanged(auth,(currentUser) =>{
-      setUser(currentUser)
-    })
-    return ()=> unSubscribe()
-  },[])
-
   const UserLogout = ()=>{
     LogOut()
   }
+  const SearchProducts = () => {
+    const filtered = products.filter(item =>
+      item.title.toLowerCase().includes(searchValue.toLowerCase()));
+      setFilterProducts(filtered);
+  };
 
   return (
     <>
@@ -82,7 +56,7 @@ const Navbar = ({ setIsLogin, products,  setFilterProducts }) => {
           {/* Search Bar */}
           <div className="nav-midd">
             <div className="search-container">
-              <input onChange={(e) => {setSearchValue(e.target.value)}} className="search-box" type="text" placeholder='Search "Bikes"' />
+              <input onChange={(e) => {setSearchValue(e.target.value)}} className="search-box" type="text" placeholder='Search "Phone"' />
               <button onClick={SearchProducts} className="search-btn">
                 <i className="fas fa-search"></i>
               </button>
