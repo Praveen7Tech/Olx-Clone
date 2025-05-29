@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./SellProduct.css";
 import { addDoc, collection } from "firebase/firestore";
 import { auth, firebaseStore } from "../../utils/firebase";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 const SellProductCard = () => {
   const [title, setTitle] = useState("");
@@ -12,6 +14,33 @@ const SellProductCard = () => {
   const [brand, setBrand] = useState("");
   const [image, setImage] = useState(null);
 
+  const {id} = useParams()
+
+  // handle product edit if the id is 
+  useEffect(()=>{
+    if(id){
+      const fetchProductDetails = async()=>{
+        try {
+          const docDetails = doc(firebaseStore, "products", id)
+          const snap = await getDoc(docDetails);
+          if(snap.exists()){
+            const data = snap.data()
+            setTitle(data.title)
+            setCategory(data.category)
+            setBrand(data.brand)
+            setDescription(data.description)
+            setPrice(data.price)
+            setImage(null)
+            localStorage.setItem(`image_${id}`,data.imageURL);
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      fetchProductDetails()
+    }
+  },[id])
+
   const navigate = useNavigate();
 
   const handleImageUpload = (e) => {
@@ -20,10 +49,11 @@ const SellProductCard = () => {
     }
   };
 
+  // FORM SUBMISSION 
   const submitForm = async (e) => {
     e.preventDefault();
 
-    // Helper to read image as DataURL
+    //read image as DataURL
     const readImageAsDataURL = (file) => {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -42,15 +72,14 @@ const SellProductCard = () => {
       try {
         imageURL = await readImageAsDataURL(image);
       } catch (error) {
-        console.error("Failed to read image as data URL:", error);
-        alert("Failed to read image URL.");
+        console.error("failed to read",error);
+        alert("failed to read image URL.");
         return;
       }
     }
 
-    try {
-      await addDoc(collection(firebaseStore, "products"), {
-        title: title.trim(),
+    const productData={
+       title: title.trim(),
         category: category.trim(),
         description: description.trim(),
         price: Number(price),
@@ -58,11 +87,25 @@ const SellProductCard = () => {
         imageURL,
         userId: auth.currentUser?.uid,
         userName: auth.currentUser?.displayName,
-        createdAt: new Date().toDateString(),
-      });
+        updatedAt: new Date().toDateString()
+    }
 
-      console.log("Product successfully added");
-      navigate("/");
+    try {
+      if(id){
+        await updateDoc(doc(firebaseStore, "products", id), productData)
+        alert("product updated")
+        navigate("/myAdds")
+      }else{
+        await addDoc(collection(firebaseStore, "products"), {
+          ...productData,
+          userId:auth.currentUser?.uid,
+          userName:auth.currentUser?.displayName,
+          createdAt: new Date().toDateString()
+        })
+        alert("product created add")
+        navigate("/")
+      }
+      
     } catch (error) {
       console.log("Error adding product:", error);
     }
@@ -72,7 +115,7 @@ const SellProductCard = () => {
     <div className="sell-product-container">
       <div className="sell-product-card">      
         <div className="card-header">
-          <h2>POST YOUR AD</h2>
+          <h2>{id ? "EDIT YOUR ADD" : "POST YOUR AD"}</h2>
           <p>Fill in the details to sell your product</p>
         </div>
 
@@ -85,6 +128,7 @@ const SellProductCard = () => {
                 <div className="form-group">
                   <label htmlFor="category">Category *</label>
                   <input
+                    value={category}
                     onChange={(e) => setCategory(e.target.value)}
                     type="text"
                     id="category"
@@ -101,6 +145,7 @@ const SellProductCard = () => {
               <div className="form-group">
                 <label htmlFor="title">Product Title *</label>
                 <input
+                 value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   type="text"
                   id="title"
@@ -111,6 +156,7 @@ const SellProductCard = () => {
               <div className="form-group">
                 <label htmlFor="description">Description *</label>
                 <textarea
+                  value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   id="description"
                   placeholder="Describe your product in detail"
@@ -122,6 +168,7 @@ const SellProductCard = () => {
                 <div className="form-group">
                   <label htmlFor="brand">Brand</label>
                   <input
+                   value={brand}
                     onChange={(e) => setBrand(e.target.value)}
                     type="text"
                     id="brand"
@@ -130,8 +177,7 @@ const SellProductCard = () => {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="model">Model</label>
-                  <input type="text" id="model" placeholder="Enter model" />
+                  
                 </div>
               </div>
             </div>
@@ -145,8 +191,9 @@ const SellProductCard = () => {
                   <div className="price-input">
                     <span className="currency">₹</span>
                     <input
+                    value={price}
                       onChange={(e) => setPrice(e.target.value)}
-                      type="number"
+                      type="text"
                       id="price"
                       placeholder="0"
                       required
@@ -154,30 +201,6 @@ const SellProductCard = () => {
                   </div>
                 </div>
                 <div className="form-group">
-                  <label>Condition *</label>
-                  <div className="radio-group">
-                    <label className="radio-label">
-                      <input type="radio" name="condition" value="new" />
-                      <span>New</span>
-                    </label>
-                    <label className="radio-label">
-                      <input
-                        type="radio"
-                        name="condition"
-                        value="used"
-                        defaultChecked
-                      />
-                      <span>Used</span>
-                    </label>
-                    <label className="radio-label">
-                      <input
-                        type="radio"
-                        name="condition"
-                        value="refurbished"
-                      />
-                      <span>Refurbished</span>
-                    </label>
-                  </div>
                 </div>
               </div>
             </div>
@@ -185,11 +208,16 @@ const SellProductCard = () => {
             {/* Images */}
             {image ? (
               <div className="image-preview">
-                <img
+                { image ?
+                (<img
                   src={URL.createObjectURL(image)}
                   alt=""
                   style={{ width: "265px", marginRight: "10px" }}
-                />
+                />)
+                : id && localStorage.getItem(`image_${id}`) ?
+                (<img src={localStorage.getItem(`image_${id}`)} alt="prev"/>)
+                : null
+                } 
                  <button
                     type="button"
                     onClick={() => setImage(null)}
@@ -227,7 +255,7 @@ const SellProductCard = () => {
             {/* Submit Buttons */}
             <div className="form-actions">
               <button type="submit" className="btn-primary">
-                Post Your Ad
+                {id ? "Update Add" : "Post Your Ad"}
               </button>
             </div>
           </form>

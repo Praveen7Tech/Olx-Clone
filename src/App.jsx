@@ -9,6 +9,7 @@ import LoginModal from './components/LoginModal/LoginModal';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './utils/firebase';
 import useProducts from './Hooks/useProducts';
+import MyAds from './pages/Myadds/MyAdds';
 
 const App = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -36,6 +37,14 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route path='/myAdds' element={
+          <ProtectedRoute>
+            <MyAds/>
+          </ProtectedRoute>
+        }/>
+        <Route path='/edit-add/:id' element={
+          <SellProduct/>
+        }/>
       </Routes>
       {isLogin && <LoginModal setIsLogin={setIsLogin} />}
     </>

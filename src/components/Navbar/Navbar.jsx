@@ -107,6 +107,10 @@ const Navbar = ({ setIsLogin, products,  setFilterProducts }) => {
                       <div className="user-email">{user.email}</div>
                     </div>
                   </div>
+                  <div className="dropdown-item">
+                    <i className="fas fa-plus"></i>
+                    <Link to={"/myAdds"}><button className="dropdown-item">My add</button></Link>
+                  </div>
                   <div className="dropdown-divider"></div>
                   <button onClick={UserLogout} className="dropdown-item logout-btn">
                     <i className="fas fa-sign-out-alt"></i>

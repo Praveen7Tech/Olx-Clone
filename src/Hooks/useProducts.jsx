@@ -26,7 +26,7 @@ const useProducts = () => {
         setFilterProducts(combined)
 
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error( error);
       }
     };
 
