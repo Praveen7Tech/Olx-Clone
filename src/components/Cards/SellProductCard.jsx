@@ -5,14 +5,22 @@ import { auth, firebaseStore } from "../../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import {sellProductFormValidate} from "../../utils/sellProductFomValidate";
 
 const SellProductCard = () => {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState(null);
   const [brand, setBrand] = useState("");
   const [image, setImage] = useState(null);
+
+  const [titleError, setTitleError] = useState(null)
+  const [categoryError, setCategoryError] = useState(null)
+  const [descriptionError, setDescriptionError] = useState(null)
+  const [priceError, setPriceError] = useState(null)
+  const [brandError, setBrandError] = useState(null)
+  const [imageError, setImageError] = useState(null)
 
   const {id} = useParams()
 
@@ -53,6 +61,24 @@ const SellProductCard = () => {
   const submitForm = async (e) => {
     e.preventDefault();
 
+    const {titleMsg,categoryMsg, descriptionMsg,priceMsg, brandMsg, imageMsg } = sellProductFormValidate(
+      title,
+      category,
+      description,
+      price,
+      brand,
+      image
+    )
+ console.log("price --",imageMsg)
+    setTitleError(titleMsg)
+    setCategoryError(categoryMsg)
+    setDescriptionError(descriptionMsg)
+    setBrandError(brandMsg)
+    setPriceError(priceMsg)
+    setImageError(imageMsg)
+
+    if(titleMsg || categoryMsg || descriptionMsg || brandMsg || priceMsg || imageMsg) return
+
     //read image as DataURL
     const readImageAsDataURL = (file) => {
       return new Promise((resolve, reject) => {
@@ -79,7 +105,7 @@ const SellProductCard = () => {
     }
 
     const productData={
-       title: title.trim(),
+        title: title.trim(),
         category: category.trim(),
         description: description.trim(),
         price: Number(price),
@@ -93,7 +119,6 @@ const SellProductCard = () => {
     try {
       if(id){
         await updateDoc(doc(firebaseStore, "products", id), productData)
-        alert("product updated")
         navigate("/myAdds")
       }else{
         await addDoc(collection(firebaseStore, "products"), {
@@ -102,7 +127,6 @@ const SellProductCard = () => {
           userName:auth.currentUser?.displayName,
           createdAt: new Date().toDateString()
         })
-        alert("product created add")
         navigate("/")
       }
       
@@ -133,8 +157,8 @@ const SellProductCard = () => {
                     type="text"
                     id="category"
                     placeholder="Enter product category"
-                    required
                   />
+                  <span className='errorMessage'>{categoryError}</span>
                 </div>
               </div>
             </div>
@@ -150,8 +174,8 @@ const SellProductCard = () => {
                   type="text"
                   id="title"
                   placeholder="Enter product title"
-                  required
                 />
+                <span className='errorMessage'>{titleError}</span>
               </div>
               <div className="form-group">
                 <label htmlFor="description">Description *</label>
@@ -161,8 +185,8 @@ const SellProductCard = () => {
                   id="description"
                   placeholder="Describe your product in detail"
                   rows={4}
-                  required
                 ></textarea>
+                <span className='errorMessage'>{descriptionError}</span>
               </div>
               <div className="form-row">
                 <div className="form-group">
@@ -173,8 +197,8 @@ const SellProductCard = () => {
                     type="text"
                     id="brand"
                     placeholder="Enter brand name"
-                    required
                   />
+                  <span className='errorMessage'>{brandError}</span>
                 </div>
                 <div className="form-group">
                   
@@ -193,12 +217,12 @@ const SellProductCard = () => {
                     <input
                     value={price}
                       onChange={(e) => setPrice(e.target.value)}
-                      type="text"
+                      type="price"
                       id="price"
                       placeholder="0"
-                      required
                     />
                   </div>
+                  <span className='errorMessage'>{priceError}</span>
                 </div>
                 <div className="form-group">
                 </div>
@@ -218,6 +242,7 @@ const SellProductCard = () => {
                 (<img src={localStorage.getItem(`image_${id}`)} alt="prev"/>)
                 : null
                 } 
+               
                  <button
                     type="button"
                     onClick={() => setImage(null)}
@@ -245,9 +270,9 @@ const SellProductCard = () => {
                       onChange={handleImageUpload}
                       type="file"
                       accept="image/*"
-                      required
                     />
                   </div>
+                  <span className="errorMessage">{imageError}</span>
                 </div>
               </div>
             )}

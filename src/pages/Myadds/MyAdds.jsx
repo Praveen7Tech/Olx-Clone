@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 const MyAds = () => {
   const { myProducts, loading, setMyProducts } = useCurrentUserProduct();
 
-  if (loading) return <p>Loading your ads...</p>;
+  if (loading) return 
 
   const deleteAdd = async(productId)=>{
     try {

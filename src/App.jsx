@@ -43,7 +43,9 @@ const App = () => {
           </ProtectedRoute>
         }/>
         <Route path='/edit-add/:id' element={
-          <SellProduct/>
+          <ProtectedRoute>
+            <SellProduct/>
+          </ProtectedRoute>
         }/>
       </Routes>
       {isLogin && <LoginModal setIsLogin={setIsLogin} />}
