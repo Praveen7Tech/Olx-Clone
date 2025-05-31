@@ -5,6 +5,7 @@ import useCurrentUserProduct from "../../Hooks/useCurrentUsersProduct";
 import { deleteDoc, doc } from "firebase/firestore";
 import { firebaseStore } from "../../utils/firebase";
 import { Link } from "react-router-dom";
+import Footer from "../../components/Footer/Footer";
 
 const MyAds = () => {
   const { myProducts, loading, setMyProducts } = useCurrentUserProduct();
@@ -66,6 +67,7 @@ const MyAds = () => {
           )}
         </div>
       </div>
+      <Footer/>
     </>
   );
 };

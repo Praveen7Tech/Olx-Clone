@@ -6,6 +6,7 @@ import useProductView from "../../Hooks/useProductView"
 import { useState } from "react"
 import ChatModal from "../../components/ChatModal/ChatModal"
 import ProductShimmer from "../../components/Shimmer/ProductShimmer"
+import Footer from "../../components/Footer/Footer"
 
 const ProductView = ({user, setIsLogin}) => {
   
@@ -164,6 +165,7 @@ const ProductView = ({user, setIsLogin}) => {
       </div>
       {showChat && <ChatModal setShowChat={setShowChat}/>}
     </div>
+    <Footer/>
     </>
   )
 }

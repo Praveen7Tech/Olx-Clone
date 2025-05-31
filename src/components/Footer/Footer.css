@@ -1,0 +1,178 @@
+.footer {
+  width: 100%;
+  margin-top: auto;
+}
+
+.footer-main {
+  background-color: #f8f9fa;
+  padding: 40px 0;
+  border-top: 1px solid #e9ecef;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-main .footer-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-heading {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+  letter-spacing: 0.5px;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 8px;
+}
+
+.footer-link {
+  color: #666;
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.social-icon {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background-color: #e9ecef;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 30px;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.social-icon:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.app-downloads {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.app-link {
+  display: inline-block;
+}
+
+.app-badge {
+  height: 35px;
+  width: auto;
+  border-radius: 4px;
+}
+
+.footer-bottom {
+  background-color: #1e3a8a;
+  color: white;
+  padding: 20px 0;
+}
+
+.footer-bottom .footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.company-logos {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.logo-item {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.olx-logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+.copyright {
+  color: #b3c6ff;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .footer-main .footer-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .footer-bottom .footer-container {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .company-logos {
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .logo-item {
+    font-size: 12px;
+  }
+  
+  .olx-logo {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-main .footer-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .company-logos {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .footer-main {
+    padding: 30px 0;
+  }
+}

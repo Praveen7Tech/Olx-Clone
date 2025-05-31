@@ -1,4 +1,5 @@
 import SellProductCard from "../../components/Cards/SellProductCard"
+import Footer from "../../components/Footer/Footer"
 import Navbar from "../../components/Navbar/Navbar"
 import "./SellProduct"
 import React from 'react'
@@ -8,6 +9,7 @@ const SellProduct = () => {
     <div>
         <Navbar/>
         <SellProductCard/>
+        <Footer/>
     </div>
   )
 }
