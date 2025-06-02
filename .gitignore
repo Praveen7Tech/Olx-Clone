@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# API credentials
+
+src/utils/constants.jsx
+src/utils/firebase.js
