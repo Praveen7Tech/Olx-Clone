@@ -200,3 +200,8 @@
     min-width: 60px;
   }
 }
+
+.edit-btn{
+  text-decoration: none;
+  color: #4a6ee0;
+}

@@ -58,7 +58,7 @@ const MyAds = () => {
                     </div>
                   </div>
                   <div className="ad-actions">
-                    <button className="action-button"><Link to={`/edit-add/${product.id}`}>Edit</Link></button>
+                    <button className="action-button"><Link className="edit-btn" to={`/edit-add/${product.id}`}>Edit</Link></button>
                     <button onClick={()=>deleteAdd(product.id)} className="action-button delete-button">Delete</button>
                   </div>
                 </div>

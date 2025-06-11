@@ -69,7 +69,7 @@ const SellProductCard = () => {
       brand,
       image
     )
- console.log("price --",imageMsg)
+   console.log("price --",imageMsg)
     setTitleError(titleMsg)
     setCategoryError(categoryMsg)
     setDescriptionError(descriptionMsg)
@@ -229,35 +229,33 @@ const SellProductCard = () => {
               </div>
             </div>
 
-            {/* Images */}
-            {image ? (
+            {/* Image */}
+            {image || (id && localStorage.getItem(`image_${id}`)) ? (
               <div className="image-preview">
-                { image ?
-                (<img
-                  src={URL.createObjectURL(image)}
-                  alt=""
+                <img
+                  src={
+                    image
+                      ? URL.createObjectURL(image)
+                      : localStorage.getItem(`image_${id}`)
+                  }
+                  alt="prev"
                   style={{ width: "265px", marginRight: "10px" }}
-                />)
-                : id && localStorage.getItem(`image_${id}`) ?
-                (<img src={localStorage.getItem(`image_${id}`)} alt="prev"/>)
-                : null
-                } 
-               
-                 <button
-                    type="button"
-                    onClick={() => setImage(null)}
-                    className="remove-image-btn"
-                    style={{
-                      marginLeft: "10px",
-                      background: "red",
-                      color: "white",
-                      border: "none",
-                      padding: "5px 10px",
-                      cursor: "pointer"
-                    }}
-                  >
-                    Remove
-                  </button>
+                />
+                <button
+                  type="button"
+                  onClick={() => setImage(null)}
+                  className="remove-image-btn"
+                  style={{
+                    marginLeft: "8px",
+                    background: "red",
+                    color: "white",
+                    border: "none",
+                    padding: "5px 10px",
+                    cursor: "pointer"
+                  }}
+                >
+                  Remove
+                </button>
               </div>
             ) : (
               <div className="form-section">
@@ -276,6 +274,7 @@ const SellProductCard = () => {
                 </div>
               </div>
             )}
+
 
             {/* Submit Buttons */}
             <div className="form-actions">
