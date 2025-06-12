@@ -140,7 +140,7 @@ const SellProductCard = () => {
       <div className="sell-product-card">      
         <div className="card-header">
           <h2>{id ? "EDIT YOUR ADD" : "POST YOUR AD"}</h2>
-          <p>Fill in the details to sell your product</p>
+          <p>{id ? "Update details to sell your product" : "Fill in the details to sell your product"}</p>
         </div>
 
         <div className="card-content">

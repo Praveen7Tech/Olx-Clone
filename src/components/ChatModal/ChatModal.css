@@ -39,16 +39,29 @@
   text-align: right;
 }
 
-.close-btn {
-  background: none;
+/* .close-btn {
+  background: red;
   border: none;
   font-size: 20px;
   cursor: pointer;
-}
+} */
 
 .send-btn{
   width: 100px;
   height: 30px;
   border-radius: 4px;
   border:1px solid black;
+}
+
+.chat-header button{
+  color: red;
+  width: 20px;
+  border: none;
+  background-color: white;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
 }
