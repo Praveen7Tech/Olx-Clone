@@ -11,9 +11,6 @@ const Card = ({title, image,imageURL, price,  description, category, isFeatured}
     <div className="card">
       <div className="card-image-container">
         <img src={imageSrc} alt={title} className="card-image" />
-        {/* <div className="card-heart">
-          <i className="far fa-heart"></i>
-        </div> */}
         {isFeatured && <div className="featured-badge">FEATURED</div>}
       </div>
 

@@ -27,8 +27,16 @@ const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home {...productState} setIsLogin={setIsLogin} />} />
-        <Route path="/product/:id" element={<ProductView user={user} setIsLogin={setIsLogin}/>} />
+        <Route
+          path="/"
+          element={
+          <Home {...productState} setIsLogin={setIsLogin} />} 
+        />
+        <Route
+          path="/product/:id" 
+          element={
+          <ProductView user={user} setIsLogin={setIsLogin}/>} 
+        />
         <Route
           path="/sellProduct"
           element={

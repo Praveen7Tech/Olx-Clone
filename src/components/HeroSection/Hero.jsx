@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 const Hero = ({ filterProducts }) => {
  
 
-  if( !filterProducts) return 
+  if( !filterProducts) return <h1>helooooo</h1>
 
   return (
     <div className="hero-section">
