@@ -25,6 +25,7 @@ const Navbar = ({ setIsLogin, products,  setFilterProducts }) => {
     const filtered = products.filter(item =>
       item.title.toLowerCase().includes(searchValue.toLowerCase()));
       setFilterProducts(filtered);
+      setSearchValue("")
   };
 
   return (
@@ -56,7 +57,7 @@ const Navbar = ({ setIsLogin, products,  setFilterProducts }) => {
           {/* Search Bar */}
           <div className="nav-midd">
             <div className="search-container">
-              <input onChange={(e) => {setSearchValue(e.target.value)}} className="search-box" type="text" placeholder='Search "Phone"' />
+              <input onChange={(e) => {setSearchValue(e.target.value)}} className="search-box" type="text" placeholder='Search "Phone"' value={searchValue}/>
               <button onClick={SearchProducts} className="search-btn">
                 <i className="fas fa-search"></i>
               </button>
