@@ -1,15 +1,16 @@
-// App.jsx
-import React, { useEffect, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Home from './pages/Home/Home';
-import ProductView from './pages/Product/ProductView';
-import SellProduct from './pages/SellProduct/SellProduct';
 import ProtectedRoute from './components/ProtectedRoute';
 import LoginModal from './components/LoginModal/LoginModal';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './utils/firebase';
 import useProducts from './Hooks/useProducts';
-import MyAds from './pages/Myadds/MyAdds';
+import HomeShimmer from "./components/Shimmer/HomeShimmer"
+
+const Home = lazy(()=> import("./pages/Home/Home"))
+const SellProduct = lazy(()=> import("./pages/SellProduct/SellProduct"))
+const ProductView = lazy(() => import("./pages/Product/ProductView"))
+const MyAds = lazy(() => import("./pages/Myadds/MyAdds"))
 
 const App = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -26,6 +27,7 @@ const App = () => {
 
   return (
     <>
+    <Suspense fallback={<div></div>}>
       <Routes>
         <Route
           path="/"
@@ -56,6 +58,7 @@ const App = () => {
           </ProtectedRoute>
         }/>
       </Routes>
+      </Suspense>
       {isLogin && <LoginModal setIsLogin={setIsLogin} />}
     </>
   );
